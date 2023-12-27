@@ -1,6 +1,9 @@
 const express = require('express');
 const connectDB = require('../config/db');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const formData = require('express-form-data');
 
 const app = express();
 
@@ -8,17 +11,24 @@ const app = express();
 connectDB();
 
 const corsOptions = {
-	origin: '*', // replace with your frontend URL
+	origin: ['http://localhost:3000', 'http://localhost:3002'], // replace with your frontend URL
 	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 	credentials: true, // Allow credentials (e.g., tokens)
 };
 
-// Enable CORS for a specific origin
-app.use(cors(corsOptions));
-
 // Init Middleware
 app.use(express.json({ extended: false }));
+// Enable CORS for a specific origin
+app.use(cors(corsOptions));
+//Configuring cookie-parser
+app.use(cookieParser());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/products/', express.static('../uploads'));
+// express formData()
+app.use(formData.parse());
 
 app.get('/', (req, res) =>
 	res.json({ msg: 'Welcome to the food store API....' })
@@ -30,6 +40,6 @@ app.use('/api/auth', require('../routes/auth'));
 app.use('/api/products', require('../routes/products'));
 app.use('/api/category', require('../routes/category'));
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));

@@ -39,7 +39,9 @@ router.post(
 // @access    Private
 router.get('/', auth, async (req, res) => {
 	try {
-		const categories = await Category.find({ user: req.user.id });
+		const categories = await Category.find().sort({
+			date: -1,
+		});
 		res.json(categories);
 	} catch (error) {
 		// console.error(errr.message)

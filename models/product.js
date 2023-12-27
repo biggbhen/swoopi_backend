@@ -3,30 +3,15 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
 	name: { type: String, required: true },
 	ingredients: { type: String, required: true },
-	description: { type: String, default: 'A delicacy' },
+	description: { type: String, required: true },
 	category: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Category', // Reference to the Category model
-		required: true,
+		id: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+		name: String,
 	},
-	price: { type: Number, required: true },
-	requiredOptions: [
-		{
-			sie: {
-				type: String,
-				required: true,
-			},
-			toppings: {
-				type: Boolean,
-				default: false,
-			},
-		},
-	],
-	user: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User',
-		required: true,
-	},
+	salesPrice: { type: Number },
+	defaultPrice: { type: Number, required: true },
+	requiredOptions: [{ name: String, isSingleChoice: Boolean }],
+	productImage: { type: String, required: true },
 	date: {
 		type: Date,
 		default: Date.now,

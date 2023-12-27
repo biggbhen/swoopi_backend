@@ -58,9 +58,11 @@ router.post(
 				},
 			};
 
-			return jwt.sign(
+			const signature = config.get('jwtSecret');
+
+			jwt.sign(
 				payload,
-				config.get('jwtSecret'),
+				signature,
 				{
 					expiresIn: 360000,
 				},
